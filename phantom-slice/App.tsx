@@ -112,7 +112,7 @@ const App: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [config, setConfig] = useState<BackendConfig>({
     useMock: false,
-    serverUrl: 'http://127.0.0.1:5000/sever'
+    serverUrl: 'https://phantomsplice-production.up.railway.app/sever'
   });
   
   const handleFileSelected = async (file: File) => {
