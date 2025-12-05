@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend Connection Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #050000;
+            color: #ff0000;
+        }
+        .test { margin: 10px 0; padding: 10px; border: 1px solid #ff0000; }
+        .pass { background: #002200; }
+        .fail { background: #220000; }
+        button { 
+            background: #ff0000; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phantom Crop - Frontend Tests</h1>
+    <div id="results"></div>
+    <button onclick="runTests()">Run Tests</button>
+
+    <script>
+        const results = document.getElementById('results');
+
+        async function testBackendHealth() {
+            try {
+                const response = await fetch('http://localhost:5000/health');
+                const data = await response.json();
+                return { pass: response.ok, message: `Health: ${data.status}` };
+            } catch (e) {
+                return { pass: false, message: `Health check failed: ${e.message}` };
+            }
+        }
+
+        async function testBackendSever() {
+            try {
+                // Create a simple test image
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = 'red';
+                ctx.fillRect(0, 0, 100, 100);
+                
+                const blob = await new Promise(resolve => canvas.toBlob(resolve));
+                const formData = new FormData();
+                formData.append('file', blob, 'test.png');
+
+                const response = await fetch('http://localhost:5000/sever', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                return { 
+                    pass: response.ok, 
+                    message: `Sever endpoint: ${response.ok ? 'OK' : 'Failed'} (${response.status})` 
+                };
+            } catch (e) {
+                return { pass: false, message: `Sever test failed: ${e.message}` };
+            }
+        }
+
+        async function runTests() {
+            results.innerHTML = '<p>Running tests...</p>';
+            
+            const tests = [
+                { name: 'Backend Health', fn: testBackendHealth },
+                { name: 'Backend Sever', fn: testBackendSever }
+            ];
+
+            let html = '';
+            for (const test of tests) {
+                const result = await test.fn();
+                html += `<div class="test ${result.pass ? 'pass' : 'fail'}">
+                    ${result.pass ? '✓' : '✗'} ${test.name}: ${result.message}
+                </div>`;
+            }
+            
+            results.innerHTML = html;
+        }
+
+        // Auto-run on load
+        window.onload = runTests;
+    </script>
+</body>
+</html>

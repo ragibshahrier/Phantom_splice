@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Phantom Crop",
+  "version": "1.0.0",
+  "description": "Remove image backgrounds with a spooky twist",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "permissions": [
+    "activeTab"
+  ],
+  "host_permissions": [
+    "http://localhost:5000/*",
+    "https://generativelanguage.googleapis.com/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

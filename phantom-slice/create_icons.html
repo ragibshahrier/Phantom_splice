@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<canvas id="c16" width="16" height="16"></canvas>
+<canvas id="c48" width="48" height="48"></canvas>
+<canvas id="c128" width="128" height="128"></canvas>
+<script>
+function drawIcon(canvas) {
+    const ctx = canvas.getContext('2d');
+    const size = canvas.width;
+    
+    // Background
+    ctx.fillStyle = '#050000';
+    ctx.fillRect(0, 0, size, size);
+    
+    // Red ghost/phantom shape
+    ctx.fillStyle = '#ff0000';
+    ctx.beginPath();
+    ctx.arc(size/2, size/2, size/3, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Eyes
+    ctx.fillStyle = '#050000';
+    const eyeSize = size/12;
+    ctx.fillRect(size/2 - size/6, size/2 - size/12, eyeSize, eyeSize);
+    ctx.fillRect(size/2 + size/12, size/2 - size/12, eyeSize, eyeSize);
+}
+
+['c16', 'c48', 'c128'].forEach(id => {
+    const canvas = document.getElementById(id);
+    drawIcon(canvas);
+    const link = document.createElement('a');
+    link.download = `icon${canvas.width}.png`;
+    link.href = canvas.toDataURL();
+    link.textContent = `Download ${canvas.width}x${canvas.width}`;
+    link.style.display = 'block';
+    link.style.margin = '10px';
+    document.body.appendChild(link);
+});
+</script>
+<p>Right-click each link and "Save link as..." to the phantom-slice folder</p>
+</body>
+</html>
