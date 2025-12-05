@@ -59,12 +59,14 @@ def health():
     return jsonify({'status': 'alive', 'message': 'The spirits are ready'})
 
 if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))
     print("=" * 50)
     print("PHANTOM CROP BACKEND")
     print("=" * 50)
-    print("Starting server on http://localhost:5000")
+    print(f"Starting server on port {port}")
     print("Endpoints:")
     print("  GET  /health - Health check")
     print("  POST /sever  - Remove background")
     print("=" * 50)
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False)
